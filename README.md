@@ -1,33 +1,33 @@
 # FanCmdWaitbar
 
-A lightweight, tqdm-inspired command-line progress bar for MATLAB.
+A lightweight, **tqdm-inspired command-line progress bar for MATLAB**.
 
-FanCmdWaitbar provides a clean, single-line progress display in the MATLAB Command Window, including percentage, iteration count, optional timing, and dynamic topic display — without cluttering the console.
-
----
-
-## Features
-
-- Single-line progress bar (no console spam)
-- Automatic or manual progress updates
-- Optional elapsed & remaining time estimation
-- Dynamic topic display (e.g. current file, epoch, etc.)
-- Adaptive width (uses full Command Window width)
-- Graceful handling of long text (auto truncation)
-- Clean termination with newline
-- No dependencies
+`FanCmdWaitbar` provides a clean, single-line progress display in the MATLAB Command Window, including percentage, iteration count, optional timing, and dynamic topic display — without cluttering the console.
 
 ---
 
-## Installation
+## ✨ Features
 
-Add the file to your MATLAB path:
-
-    addpath('path/to/FanCmdWaitbar')
+- ✅ Single-line progress bar (no console spam)
+- ✅ Automatic or manual progress updates
+- ✅ Optional elapsed & remaining time estimation
+- ✅ Dynamic topic display (e.g. current file, epoch, etc.)
+- ✅ Adaptive width (uses full Command Window width)
+- ✅ Graceful handling of long text (auto truncation)
+- ✅ Clean termination with newline
+- ✅ No dependencies
 
 ---
 
-## Quick Start
+## 📦 Installation
+
+Simply copy the file into your MATLAB path:
+
+```matlab
+addpath('path/to/FanCmdWaitbar')
+
+```
+## 🚀Quick Start
 
 Minimal example (auto-increment):
 
@@ -61,7 +61,7 @@ Disable timing:
 
 ---
 
-## API
+## ⚙️API
 
 Constructor:
 
@@ -90,7 +90,7 @@ Behaviour:
 
 ---
 
-## Time Estimation
+## ⏱Time Estimation
 
 When enabled, the bar shows:
 
@@ -102,13 +102,13 @@ Estimation is based on:
 
 ---
 
-## Example Output
+## 🖥Example Output
 
     Processing |[===========>        ]  42.00%  21/50  00:00:02<00:00:03, Total~00:00:05 | file_021.png
 
 ---
 
-## Notes
+## ⚠️Notes
 
 - The progress bar assumes exclusive control over the Command Window line
 - Additional fprintf/disp calls may break formatting
@@ -117,25 +117,20 @@ Estimation is based on:
 
 ---
 
-## Testing
+## 🧪Testing
 
 Run:
 
-    runFanCmdWaitbarTests
-
-or:
-
-    results = runtests('FanCmdWaitbarTest.m');
-    table(results)
+    runTests_FanCmdWaitbar
 
 ---
 
-## License
+## 📄License
 
 MIT License
 
 ---
 
-## Contributing
+## 🤝Contributing
 
 Feel free to open issues or pull requests for improvements.
