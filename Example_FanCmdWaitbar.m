@@ -1,9 +1,11 @@
+clc
 wb = FanCmdWaitbar(50,'startIdx',1,'title','Training');
 topic = ["cleaning dishes","listening to protovibe","cycling","watching TV","beeing fancy"];
 for k = 1:50
   pause(0.2)
   wb.step(k, topic(floor((k-1)/10)+1));
 end
+fprintf('finish \n')
 
 wb = FanCmdWaitbar(5*3,'startIdx',1,'title','Training');
 for k = 1:5
