@@ -3,6 +3,7 @@
 A lightweight, **tqdm-inspired command-line progress bar for MATLAB**.
 
 `FanCmdWaitbar` provides a clean, single-line progress display in the MATLAB Command Window, including percentage, iteration count, optional timing, and dynamic topic display — without cluttering the console.
+<img width="1319" height="144" alt="grafik" src="https://github.com/user-attachments/assets/216085b8-5a80-4a27-aa26-277cf8ce3db6" />
 
 ---
 
