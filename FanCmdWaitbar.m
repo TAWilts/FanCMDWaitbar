@@ -221,15 +221,13 @@ classdef FanCmdWaitbar < handle
                 line = obj.truncateText(line, cmdWidth);
             end
 
+
             % Overwrite previous line completely
-            
             if obj.lastPrintLength > 0
-                fprintf(repmat('\b', 1, obj.lastPrintLength));
-                fprintf(repmat(' ', 1, obj.lastPrintLength));
-                fprintf(repmat('\b', 1, obj.lastPrintLength));
+                fprintf(repmat('\b', 1, obj.lastPrintLength+1));
             end
 
-            fprintf('%s', line);
+            fprintf('%s\n', line);
             obj.lastPrintLength = length(line);
         end
 
