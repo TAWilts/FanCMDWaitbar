@@ -62,6 +62,18 @@ Disable timing:
 
     wb = FanCmdWaitbar(100, 'showTime', false);
 
+Nested waitbars:
+
+    wb = FanCmdWaitbar(200,'startIdx',1,'title','Training');
+    for k = 1:200
+        wb.step(k, sprintf('epoch item %d', k));
+        wb2 = FanCmdWaitbar(10,'title','Batch');
+        for b = 1:10
+            pause(0.2)
+            wb2.step()
+        end
+        wb2.clc()
+    end
 ---
 
 ## ⚙️API
