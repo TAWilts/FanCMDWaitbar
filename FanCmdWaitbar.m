@@ -21,8 +21,8 @@ classdef FanCmdWaitbar < handle
     %   for k = 1:200
     %       wb.step(k, sprintf('epoch item %d', k));
     %       wb2 = FanCmdWaitbar(10,'title','Batch');
-    %       for b = 1:200
-    %           pause(0.02)
+    %       for b = 1:10
+    %           pause(0.2)
     %           wb2.step()
     %       end
     %       wb2.clc()
