@@ -45,6 +45,7 @@ classdef FanCmdWaitbar < handle
 
         lastPrintLength (1,1) double = 0
         finished (1,1) logical = false
+        clearAfterFinish (1,1) logical = false
 
         barFillChar  (1,:) char = '='
         barHeadChar  (1,:) char = '>'
@@ -113,11 +114,12 @@ classdef FanCmdWaitbar < handle
                 obj.currentIdx = obj.endIdx;
                 obj.render(currentTopic);
                 fprintf('\n');
+                obj.lastPrintLength = obj.lastPrintLength +1;
                 obj.finished = true;
             else
-
                 obj.render(currentTopic);
             end
+
         end
 
         function delete(obj)
@@ -125,6 +127,10 @@ classdef FanCmdWaitbar < handle
             if ~obj.finished && obj.lastPrintLength > 0
                 fprintf('\n');
             end
+            
+        end
+        function clc(obj)
+            fprintf(repmat('\b', 1, obj.lastPrintLength));
         end
     end
 
@@ -224,11 +230,11 @@ classdef FanCmdWaitbar < handle
 
             % Overwrite previous line completely
             if obj.lastPrintLength > 0
-                fprintf(repmat('\b', 1, obj.lastPrintLength+1));
+                obj.clc();
             end
 
             fprintf('%s\n', line);
-            obj.lastPrintLength = length(line);
+            obj.lastPrintLength = length(line)+1;
         end
 
         function bar = makeBar(obj, frac, width)
