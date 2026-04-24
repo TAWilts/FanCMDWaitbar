@@ -15,6 +15,19 @@ classdef FanCmdWaitbar < handle
     %       pause(0.02)
     %       wb.step(k, sprintf('epoch item %d', k));
     %   end
+    %
+    % Example 3: nested waitbars
+    %   wb = FanCmdWaitbar(200,'startIdx',1,'title','Training');
+    %   for k = 1:200
+    %       wb.step(k, sprintf('epoch item %d', k));
+    %       wb2 = FanCmdWaitbar(10,'title','Batch');
+    %       for b = 1:200
+    %           pause(0.02)
+    %           wb2.step()
+    %       end
+    %       wb2.clc()
+    %   end
+    %
     % parameters:
     %   'endIdx'    : required
     %
@@ -23,11 +36,14 @@ classdef FanCmdWaitbar < handle
     %   'showTime'  : default true
     %   'title'     : default ''
     %
-    % step() parameters:
+    % step(): increment progress
+    %  parameters:
     %   step()
     %   step(i)
     %   step(i, currentTopic)
     %   step([], currentTopic)   % auto-increment + topic
+    %
+    % clc(): clears the last line
     %
     % Notes:
     % - Uses a single command-window line and overwrites it.
@@ -131,6 +147,7 @@ classdef FanCmdWaitbar < handle
         end
         function clc(obj)
             fprintf(repmat('\b', 1, obj.lastPrintLength));
+            obj.lastPrintLength = 0;
         end
     end
 
