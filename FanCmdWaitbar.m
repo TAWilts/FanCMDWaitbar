@@ -289,7 +289,7 @@ classdef FanCmdWaitbar < handle
             try
                 sz = matlab.desktop.commandwindow.size;
                 % Usually [cols rows]
-                w = max(sz);
+                w = sz(1);
             catch
                 % keep fallback
             end
