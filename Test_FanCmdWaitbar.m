@@ -4,7 +4,13 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
     % Run with:
     %   results = runtests('FanCmdWaitbarTest.m');
     %   table(results)
-
+    %
+    % Checkout the [Matlab File Exchange](https://de.mathworks.com/matlabcentral/fileexchange/183723-fancmdwaitbar) 
+    % or [GitHub](https://github.com/tawilts/FanCmdWaitbar) for more information and updates. 
+    %
+    % Author: T. A. Wilts
+    % License: MIT
+    
     methods (Test)
         function constructorRequiresEndIdx(testCase)
             testCase.verifyError(@() FanCmdWaitbar([]), ...

@@ -1,3 +1,8 @@
+% Checkout the [Matlab File Exchange](https://de.mathworks.com/matlabcentral/fileexchange/183723-fancmdwaitbar) 
+% or [GitHub](https://github.com/tawilts/FanCmdWaitbar) for more information and updates. 
+%
+% Author: T. A. Wilts
+% License: MIT
 clc
 clear all
 

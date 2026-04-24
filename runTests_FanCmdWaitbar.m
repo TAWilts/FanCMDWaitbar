@@ -7,6 +7,12 @@ function results = runTests_FanCmdWaitbar()
 %
 % Optional:
 %   table(results)
+%
+% Checkout the [Matlab File Exchange](https://de.mathworks.com/matlabcentral/fileexchange/183723-fancmdwaitbar) 
+% or [GitHub](https://github.com/tawilts/FanCmdWaitbar) for more information and updates. 
+%
+% Author: T. A. Wilts
+% License: MIT
 
     fprintf('Running FanCmdWaitbar tests...\n');
 

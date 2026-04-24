@@ -48,6 +48,12 @@ classdef FanCmdWaitbar < handle
     % Notes:
     % - Uses a single command-window line and overwrites it.
     % - Finishes with a newline once progress reaches endIdx.
+    %
+    % Checkout the [Matlab File Exchange](https://de.mathworks.com/matlabcentral/fileexchange/183723-fancmdwaitbar) 
+    % or [GitHub](https://github.com/tawilts/FanCmdWaitbar) for more information and updates. 
+    %
+    % Author: T. A. Wilts
+    % License: MIT
 
     properties (Access = private)
         startIdx (1,1) double = 1
