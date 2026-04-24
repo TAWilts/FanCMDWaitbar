@@ -65,6 +65,8 @@ classdef FanCmdWaitbar < handle
         currentIdx (1,1) double
         startTime datetime
 
+        lastElapsedSeconds (1,1) double = 0
+
         lastPrintLength (1,1) double = 0
         finished (1,1) logical = false
         clearAfterFinish (1,1) logical = false
@@ -114,11 +116,17 @@ classdef FanCmdWaitbar < handle
             if obj.finished
                 return
             end
-
+            
+            excludeFromTimeEstimation = false;
             if nargin < 2 || isempty(i)
                 obj.currentIdx = obj.currentIdx + 1;
             else
                 validateattributes(i, {'numeric'}, {'scalar','finite'});
+                % check, if new idx is above current idx for time
+                % estimation
+                if obj.currentIdx>=i
+                    excludeFromTimeEstimation = true;
+                end
                 obj.currentIdx = i;
             end
 
@@ -139,7 +147,7 @@ classdef FanCmdWaitbar < handle
                 obj.lastPrintLength = obj.lastPrintLength +1;
                 obj.finished = true;
             else
-                obj.render(currentTopic);
+                obj.render(currentTopic,excludeFromTimeEstimation);
             end
 
         end
@@ -158,8 +166,20 @@ classdef FanCmdWaitbar < handle
     end
 
     methods (Access = private)
-        function render(obj, currentTopic)
-            elapsedSeconds = seconds(datetime('now') - obj.startTime);
+        function render(obj, currentTopic,excludeFromTimeEstimation)
+            arguments
+                obj 
+                currentTopic = ''
+                excludeFromTimeEstimation = false
+            end
+            
+            % if the new index did not increase, omit time estimation
+            if excludeFromTimeEstimation
+                elapsedSeconds = obj.lastElapsedSeconds;
+            else
+                elapsedSeconds = seconds(datetime('now') - obj.startTime);
+                obj.lastElapsedSeconds = elapsedSeconds;
+            end
 
             totalSteps = obj.endIdx - obj.startIdx + 1;
             doneSteps  = max(0, obj.currentIdx - obj.startIdx + 1);
