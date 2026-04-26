@@ -13,6 +13,7 @@ Available at [GitHub](https://github.com/TAWilts/FanCMDWaitbar) or at [Matlab fi
 ## ✨ Features
 
 - ✅ Single-line progress bar (no console spam)
+- ✅ Supports parfor loops
 - ✅ Automatic or manual progress updates
 - ✅ Optional elapsed & remaining time estimation
 - ✅ Dynamic topic display (e.g. current file, epoch, etc.)
@@ -75,6 +76,15 @@ Nested waitbars:
         end
         wb2.clc()
     end
+    
+Parfor loops:
+
+    N = 100;
+    wb = FanCmdWaitbar(N, title="Send the minions",mode="parfor");
+    parfor k = 1:N
+        pause(randi(20) * 0.1)
+        wb.step([],sprintf('minion %d', k))
+    end
 ---
 
 ## ⚙️API
@@ -90,6 +100,7 @@ Optional:
 - startIdx (default: 1)
 - showTime (default: true)
 - title (default: '')
+- mode ('default'/'parfor')
 
 Step function:
 
@@ -100,7 +111,7 @@ Step function:
 
 Behaviour:
 - No argument → auto-increment
-- i provided → set explicit progress
+- i provided → set explicit progress, skip in parfor-mode
 - currentTopic → displayed on the right side
 - Stops automatically when endIdx is reached
 
