@@ -28,6 +28,15 @@ classdef FanCmdWaitbar < handle
     %       wb2.clc()
     %   end
     %
+    % Example 4: parfor  
+    %   fprintf('Parfor \n')
+    %   N = 100;
+    %   wb = FanCmdWaitbar(N, title="Send the minions",mode="parfor");
+    %   parfor k = 1:N
+    %       pause(randi(20) * 0.1)
+    %       wb.step([],sprintf('minion %d', k))
+    %   end
+    %
     % parameters:
     %   'endIdx'    : required
     %
