@@ -52,3 +52,18 @@ function doSomething()
     end
     wb.clc()
 end
+
+
+fprintf('Parfor \n')
+
+N = 100;
+wb = FanCmdWaitbar(N, title="Send the minions",mode="parfor");
+
+parfor k = 1:N
+    pause(randi(50) * 0.1)
+
+    % work ...
+
+    wb.step([],sprintf('item %d', k))
+end
+

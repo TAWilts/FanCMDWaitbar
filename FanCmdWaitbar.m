@@ -61,7 +61,13 @@ classdef FanCmdWaitbar < handle
 
         showTime (1,1) logical = true
         title    (1,:) char = ''
-        
+
+        mode    (1,:) char = "default"
+        loopModes (1,:) string = ["default","parfor"];
+
+        % for parfor
+        parforQueue
+
         currentIdx (1,1) double
         startTime datetime
 
@@ -84,6 +90,7 @@ classdef FanCmdWaitbar < handle
             addParameter(p, 'startIdx', 1, @(x) isnumeric(x) && isscalar(x));
             addParameter(p, 'showTime', true, @(x) islogical(x) || isnumeric(x));
             addParameter(p, 'title', '', @(x) ischar(x) || isstring(x));
+            addParameter(p, 'mode', 'default', @(x) ischar(x) || isstring(x));
             parse(p, varargin{:});
 
             if isempty(endIdx)
@@ -95,6 +102,19 @@ classdef FanCmdWaitbar < handle
             obj.endIdx     = endIdx;
             obj.showTime   = logical(p.Results.showTime);
             obj.title      = char(string(p.Results.title));
+            obj.mode       = lower(string(p.Results.mode));
+
+            if ~any(contains(obj.loopModes,obj.mode))
+                error('FanCmdWaitbar:InvalidMode',sprintf("%s is not a valid mode. Choose one of: %s",obj.mode,strjoin(obj.loopModes,", ")))
+            end
+            
+            % in parfor, setup queue
+            if strcmp(obj.mode,obj.loopModes(2))
+                obj.parforQueue = parallel.pool.DataQueue;
+                afterEach(obj.parforQueue, @(topic) obj.internalStep([], topic));
+            end
+
+            obj.title = char(string(p.Results.title));
 
             if obj.endIdx < obj.startIdx
                 error('FanCmdWaitbar:InvalidRange', ...
@@ -107,7 +127,41 @@ classdef FanCmdWaitbar < handle
             obj.render('');
         end
 
+        
         function step(obj, i, currentTopic)
+            if nargin < 3
+                currentTopic = '';
+            end
+            if nargin < 2
+                i = [];
+            end
+            switch obj.mode
+                case obj.loopModes(1) % default
+                    obj.internalStep(i,currentTopic)
+                case obj.loopModes(2) % parfor
+                    if ~isempty(i)
+                        warning('FanCmdWaitbar:stepInParfor','in parfor-mode, ''i'' should be empty: FanCmdWaitbar.step([],...')
+                    end
+                    send(obj.parforQueue, currentTopic);
+            end
+        end
+        
+
+        function delete(obj)
+            % Make sure the cursor ends on a clean line
+            if ~obj.finished && obj.lastPrintLength > 0
+                fprintf('\n');
+            end
+            
+        end
+        function clc(obj)
+            fprintf(repmat('\b', 1, obj.lastPrintLength));
+            obj.lastPrintLength = 0;
+        end
+    end
+
+    methods (Access = private)
+        function internalStep(obj,i,currentTopic)
             % step()                  -> auto increment by 1
             % step(i)                 -> set current progress
             % step(i, currentTopic)   -> set progress + topic
@@ -151,21 +205,6 @@ classdef FanCmdWaitbar < handle
             end
 
         end
-
-        function delete(obj)
-            % Make sure the cursor ends on a clean line
-            if ~obj.finished && obj.lastPrintLength > 0
-                fprintf('\n');
-            end
-            
-        end
-        function clc(obj)
-            fprintf(repmat('\b', 1, obj.lastPrintLength));
-            obj.lastPrintLength = 0;
-        end
-    end
-
-    methods (Access = private)
         function render(obj, currentTopic,excludeFromTimeEstimation)
             arguments
                 obj 
