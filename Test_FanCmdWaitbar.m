@@ -27,6 +27,10 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
                 'FanCmdWaitbar:InvalidMode');
         end
 
+        function constructorRejectsInvalidBarStyle(testCase)
+            testCase.verifyError(@() FanCmdWaitbar(5, 'barStyle', 'invalid'), ...
+                'FanCmdWaitbar:InvalidBarStyle');
+        end
         function constructorAcceptsDefaultMode(testCase)
             out = evalc('wb = FanCmdWaitbar(5, ''mode'', ''default''); delete(wb);');
             finalOut = testCase.normalizeTerminalOutput(out);
@@ -34,7 +38,7 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
             testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('0/5'));
             testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('0.00%'));
         end
-
+        
         function constructorPrintsInitialState(testCase)
             out = evalc('wb = FanCmdWaitbar(5); delete(wb);');
             finalOut = testCase.normalizeTerminalOutput(out);
@@ -258,6 +262,142 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
             testCase.verifyTrue(didError);
         end
 
+        function vectorStyleConstructorWorks(testCase)
+            out = evalc('wb = FanCmdWaitbar(5, ''barStyle'', ''vector'', ''showTime'', false, ''title'', ''Vector''); delete(wb);');
+            finalOut = testCase.normalizeTerminalOutput(out);
+
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('Vector |'));
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('0/5'));
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('0.00%'));
+        end
+
+        function vectorStyleNonSequentialIndexCountsMarkedItems(testCase)
+            out = evalc([ ...
+                'wb = FanCmdWaitbar(5, ''barStyle'', ''vector'', ''showTime'', false);' newline ...
+                'wb.step(3);' newline ...
+                'delete(wb);' ...
+            ]);
+            finalOut = testCase.normalizeTerminalOutput(out);
+
+            % In vector mode, step(3) marks one item; it must not imply 3/5.
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('1/5'));
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('20.00%'));
+        end
+
+        function vectorStyleMultipleIndicesAreCounted(testCase)
+            out = evalc([ ...
+                'wb = FanCmdWaitbar(5, ''barStyle'', ''vector'', ''showTime'', false);' newline ...
+                'wb.step(1);' newline ...
+                'wb.step(3);' newline ...
+                'wb.step(4);' newline ...
+                'delete(wb);' ...
+            ]);
+            finalOut = testCase.normalizeTerminalOutput(out);
+
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('3/5'));
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('60.00%'));
+        end
+
+        function vectorStyleRepeatedIndexIsNotDoubleCounted(testCase)
+            out = evalc([ ...
+                'wb = FanCmdWaitbar(5, ''barStyle'', ''vector'', ''showTime'', false);' newline ...
+                'wb.step(3, ''first'');' newline ...
+                'wb.step(3, ''repeat'');' newline ...
+                'delete(wb);' ...
+            ]);
+            finalOut = testCase.normalizeTerminalOutput(out);
+
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('1/5'));
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('20.00%'));
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('repeat'));
+        end
+
+        function vectorStyleCustomStepSymbolIsDisplayed(testCase)
+            out = evalc([ ...
+                'wb = FanCmdWaitbar(5, ''barStyle'', ''vector'', ''showTime'', false);' newline ...
+                'wb.step(2, '''', ''x'');' newline ...
+                'delete(wb);' ...
+            ]);
+            finalOut = testCase.normalizeTerminalOutput(out);
+
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('0/5'));
+            testCase.verifyTrue(contains(finalOut, 'x'));
+        end
+
+        function vectorStyleCompletesAfterAllIndicesAreMarked(testCase)
+            out = evalc([ ...
+                'wb = FanCmdWaitbar(3, ''barStyle'', ''vector'', ''showTime'', false);' newline ...
+                'wb.step(3);' newline ...
+                'wb.step(1);' newline ...
+                'wb.step(2);' newline ...
+            ]);
+            finalOut = testCase.normalizeTerminalOutput(out);
+
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('3/3'));
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('100.00%'));
+            testCase.verifyEqual(out(end), newline);
+        end
+
+        function vectorStateModeIntermediateStatesDoNotCountAsFinished(testCase)
+            out = evalc([ ...
+                'wb = FanCmdWaitbar(3, ''barStyle'', ''vector'', ''showTime'', false, ''vectorDoneChar'', ''S'');' newline ...
+                'wb.step(1, '''', ''L'');' newline ...
+                'wb.step(2, '''', ''P'');' newline ...
+                'delete(wb);' ...
+            ]);
+            finalOut = testCase.normalizeTerminalOutput(out);
+
+            % With vectorDoneChar set, only entries with the end symbol count as complete.
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('0/3'));
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('0.00%'));
+            testCase.verifyTrue(contains(finalOut, 'L') || contains(finalOut, 'P'));
+        end
+
+        function vectorStateModeEndSymbolCountsAsFinished(testCase)
+            out = evalc([ ...
+                'wb = FanCmdWaitbar(3, ''barStyle'', ''vector'', ''showTime'', false, ''vectorDoneChar'', ''S'');' newline ...
+                'wb.step(1, '''', ''L'');' newline ...
+                'wb.step(1, '''', ''S'');' newline ...
+                'delete(wb);' ...
+            ]);
+            finalOut = testCase.normalizeTerminalOutput(out);
+
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('1/3'));
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('33.33%'));
+            testCase.verifyTrue(contains(finalOut, 'S'));
+        end
+
+        function vectorStateModeCompletesOnlyWhenAllEndSymbolsAreSet(testCase)
+            out = evalc([ ...
+                'wb = FanCmdWaitbar(2, ''barStyle'', ''vector'', ''showTime'', false, ''vectorDoneChar'', ''S'');' newline ...
+                'wb.step(1, '''', ''L'');' newline ...
+                'wb.step(2, '''', ''P'');' newline ...
+                'wb.step(1, '''', ''S'');' newline ...
+                'wb.step(2, '''', ''S'');' newline ...
+            ]);
+            finalOut = testCase.normalizeTerminalOutput(out);
+
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('2/2'));
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('100.00%'));
+            testCase.verifyEqual(out(end), newline);
+        end
+
+        function vectorStateModeGroupedRareStateIsVisible(testCase)
+            out = evalc([ ...
+                'wb = FanCmdWaitbar(120, ''barStyle'', ''vector'', ''showTime'', false, ''vectorDoneChar'', ''S'');' newline ...
+                'for k = 1:120, wb.step(k, '''', ''S''); end' newline ...
+                'wb = FanCmdWaitbar(120, ''barStyle'', ''vector'', ''showTime'', false, ''vectorDoneChar'', ''S'');' newline ...
+                'for k = 1:119, wb.step(k, '''', ''S''); end' newline ...
+                'wb.step(120, '''', ''P'');' newline ...
+                'delete(wb);' ...
+            ]);
+            finalOut = testCase.normalizeTerminalOutput(out);
+
+            % For grouped vector bars, the rare/non-final state should remain visible.
+            testCase.verifyTrue(contains(finalOut, 'P'));
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('119/120'));
+        end
+
         function parforModeCanBeConstructed(testCase)
             testCase.assumeTrue(testCase.hasParallelToolbox(), ...
                 'Parallel Computing Toolbox is required for parfor mode tests.');
@@ -269,7 +409,7 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
             testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('0/5'));
         end
 
-        function parforModeStepWithExplicitIndexWarns(testCase)
+        function parforBarModeStepWithExplicitIndexWarns(testCase)
             testCase.assumeTrue(testCase.hasParallelToolbox(), ...
                 'Parallel Computing Toolbox is required for parfor mode tests.');
 
@@ -280,7 +420,7 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
                 'FanCmdWaitbar:stepInParfor');
         end
 
-        function parforModeStepWithoutIndexDoesNotWarn(testCase)
+        function parforBarModeStepWithoutIndexDoesNotWarn(testCase)
             testCase.assumeTrue(testCase.hasParallelToolbox(), ...
                 'Parallel Computing Toolbox is required for parfor mode tests.');
 
@@ -307,6 +447,34 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
             % DataQueue callbacks are asynchronous. The pause above gives MATLAB
             % time to execute afterEach callbacks on the client.
             testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('3/3'));
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('100.00%'));
+        end
+
+        function parforVectorModeAcceptsExplicitIndexWithoutWarning(testCase)
+            testCase.assumeTrue(testCase.hasParallelToolbox(), ...
+                'Parallel Computing Toolbox is required for parfor mode tests.');
+
+            wb = FanCmdWaitbar(5, 'mode', 'parfor', 'barStyle', 'vector');
+            c = onCleanup(@() delete(wb)); %#ok<NASGU>
+
+            testCase.verifyWarningFree(@() wb.step(3, 'workerC'));
+        end
+
+        function parforVectorStateModeUpdatesViaDataQueue(testCase)
+            testCase.assumeTrue(testCase.hasParallelToolbox(), ...
+                'Parallel Computing Toolbox is required for parfor mode tests.');
+
+            out = evalc([ ...
+                'wb = FanCmdWaitbar(2, ''mode'', ''parfor'', ''barStyle'', ''vector'', ''showTime'', false, ''vectorDoneChar'', ''S'');' newline ...
+                'wb.step(1, [], ''L'');' newline ...
+                'wb.step(1, [], ''S'');' newline ...
+                'wb.step(2, [], ''S'');' newline ...
+                'pause(0.5);' newline ...
+                'delete(wb);' ...
+            ]);
+            finalOut = testCase.normalizeTerminalOutput(out);
+
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('2/2'));
             testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('100.00%'));
         end
     end
