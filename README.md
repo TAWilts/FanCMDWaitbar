@@ -1,6 +1,6 @@
 # FanCmdWaitbar
 
-A lightweight, **tqdm-inspired command-line progress bar for MATLAB**.
+A lightweight, **tqdm-inspired command-line progress bar for MATLAB**. Especially convenient for projects with e.g. lots of figures that bury the usual graphic ```waitbar()```, nested processes, ```parfor```-loops, CLI standalone applications, or matlab in ```-nodesktop``` mode.
 
 Available at [GitHub](https://github.com/TAWilts/FanCMDWaitbar) or at [Matlab file exchange](https://de.mathworks.com/matlabcentral/fileexchange/183723-fancmdwaitbar)
 
