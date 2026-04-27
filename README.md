@@ -5,7 +5,8 @@ A lightweight, **tqdm-inspired command-line progress bar for MATLAB**. Especiall
 Available at [GitHub](https://github.com/TAWilts/FanCMDWaitbar) or at [Matlab file exchange](https://de.mathworks.com/matlabcentral/fileexchange/183723-fancmdwaitbar)
 
 `FanCmdWaitbar` provides a clean, single-line progress display in the MATLAB Command Window, including percentage, iteration count, optional timing, and dynamic topic display — without cluttering the console.
-<img width="1578" height="334" alt="Aufzeichnung 2026-04-26 222541_2" src="https://github.com/user-attachments/assets/b6eed798-adeb-43df-bedc-47f8ee38173e" />
+<img width="1866" height="360" alt="Aufzeichnung 2026-04-28 011429" src="https://github.com/user-attachments/assets/7ac810ed-014c-488b-88af-ee6e46c39236" />
+
 
 
 ---
@@ -86,7 +87,95 @@ Parfor loops:
         wb.step([],sprintf('minion %d', k))
     end
 ---
+### Vector-style progress for non-sequential work
 
+For non-sequential processes, `barStyle="vector"` marks individual indices instead of assuming that progress is strictly ordered.
+
+```matlab
+wb = FanCmdWaitbar(5, 'barStyle', 'vector', 'showTime', false);
+
+wb.step(1)              % marks item 1 as done
+wb.step(3)              % marks item 3 as done
+wb.step(4, '', 'x')     % marks item 4 with custom symbol x
+```
+
+This is useful when tasks finish out of order.
+
+---
+
+### Vector-style progress with many items
+
+If there are more logical items than visible command-window columns, multiple items are grouped into one displayed character.
+
+```matlab
+N = 100;
+order = randperm(N);
+
+wb = FanCmdWaitbar(N, ...
+    'title', 'Send the minions', ...
+    'barStyle', 'vector');
+
+for k = order
+    pause(randi(5) * 0.02)
+    wb.step(k, sprintf('minion %d finished', k))
+end
+```
+
+---
+
+### Vector-style state display
+
+The third argument of `step()` can be used as a state symbol.
+
+If `vectorDoneChar` is changed, only this character counts as completed. Other symbols remain visible as intermediate states.
+
+```matlab
+N = 100;
+
+wb = FanCmdWaitbar(N, ...
+    'title', 'Converting Images', ...
+    'barStyle', 'vector', ...
+    'vectorDoneChar', 'S');
+
+for k = randperm(N)
+    wb.step(k, [], 'L')                         % loading
+    pause(0.05)
+
+    wb.step(k, [], 'P')                         % processing
+    pause(0.05)
+
+    wb.step(k, sprintf('img %d saved', k), 'S') % saved / finished
+end
+```
+
+---
+
+### Vector-style `parfor` progress with states
+
+Vector style is especially useful for `parfor`, because iterations finish out of order.
+
+```matlab
+N = 100;
+
+wb = FanCmdWaitbar(N, ...
+    'title', 'Converting Images', ...
+    'mode', 'parfor', ...
+    'barStyle', 'vector', ...
+    'vectorDoneChar', 'S');
+
+parfor k = 1:N
+    pause(randi(10) * 0.05)
+    wb.step(k, [], 'L')
+
+    pause(randi(10) * 0.05)
+    wb.step(k, [], 'P')
+
+    pause(randi(20) * 0.05)
+    wb.step(k, sprintf('img %d processed', k), 'S')
+end
+```
+
+When displayed items are grouped and `vectorDoneChar` is custom, the least frequent state in each group is shown. This helps identify the state that a group is likely waiting on.
 ## ⚙️API
 
 Constructor:
