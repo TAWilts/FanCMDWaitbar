@@ -1,6 +1,6 @@
 # FanCmdWaitbar
 
-A lightweight, **tqdm-inspired command-line progress bar for MATLAB**. Especially convenient for projects with e.g. lots of figures that bury the usual graphic ```waitbar()```, nested processes, ```parfor```-loops, CLI standalone applications, or matlab in ```-nodesktop``` mode.
+A lightweight, **tqdm-inspired command-line progress bar for MATLAB**. Especially convenient for projects with e.g. lots of figures that bury the usual graphic ```waitbar()```, nested processes, ```parfor```-loops, CLI standalone applications, or matlab in ```-nodesktop``` mode. A non-sequential mode allows the oversight of unordered loops like parfors or independent processes.
 
 Available at [GitHub](https://github.com/TAWilts/FanCMDWaitbar) or at [Matlab file exchange](https://de.mathworks.com/matlabcentral/fileexchange/183723-fancmdwaitbar)
 
@@ -15,6 +15,7 @@ Available at [GitHub](https://github.com/TAWilts/FanCMDWaitbar) or at [Matlab fi
 
 - ✅ Single-line progress bar (no console spam)
 - ✅ Supports parfor loops
+- ✅ Supports non-sequential loops
 - ✅ Automatic or manual progress updates
 - ✅ Optional elapsed & remaining time estimation
 - ✅ Dynamic topic display (e.g. current file, epoch, etc.)
