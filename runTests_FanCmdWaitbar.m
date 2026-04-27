@@ -16,7 +16,7 @@ function results = runTests_FanCmdWaitbar()
 
     fprintf('Running FanCmdWaitbar tests...\n');
 
-    results = runtests('FanCmdWaitbarTest.m');
+    results = runtests('Test_FanCmdWaitbar.m');
 
     nTotal  = numel(results);
     nPassed = sum([results.Passed]);
@@ -38,7 +38,11 @@ function results = runTests_FanCmdWaitbar()
         for k = 1:nTotal
             if results(k).Failed || results(k).Incomplete
                 fprintf('\n- %s\n', results(k).Name);
-                fprintf('  Outcome: %s\n', char(results(k).Outcome));
+                if results(k).Failed
+                    fprintf('  Outcome: Failed\n');
+                else
+                    fprintf('  Outcome: Incomplete\n');
+                end
 
                 if ~isempty(results(k).Details)
                     try
