@@ -252,7 +252,7 @@ MIT License
 If you use this tool in your research or projects, please cite it as:
 
 Thomas Wilts, *FanCmdWaitbar: A lightweight command-line progress bar for MATLAB*, GitHub repository, 2026.  
-Available at: https://github.com/YOUR_USERNAME/FanCmdWaitbar
+Available at: https://github.com/TAWilts/FanCmdWaitbar
 
 ### BibTeX
 
@@ -261,7 +261,7 @@ Available at: https://github.com/YOUR_USERNAME/FanCmdWaitbar
   author       = {Thomas Wilts},
   title        = {FanCmdWaitbar: A lightweight command-line progress bar for MATLAB},
   year         = {2026},
-  howpublished = {\url{https://github.com/YOUR_USERNAME/FanCmdWaitbar}},
+  howpublished = {\url{https://github.com/TAWilts/FanCmdWaitbar}},
   note         = {GitHub repository}
 }
 ```
