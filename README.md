@@ -53,6 +53,8 @@ With title and topic:
         pause(0.05)
         wb.step(k, sprintf('file_%03d.png', k));
     end
+<img width="1222" height="118" alt="Aufzeichnung 2026-05-01 014303" src="https://github.com/user-attachments/assets/9972a848-f724-4ced-b36a-198323548e33" />
+
 
 With custom start index:
 
@@ -78,7 +80,8 @@ Nested waitbars:
         end
         wb2.clc()
     end
-    
+<img width="1214" height="124" alt="Aufzeichnung 2026-05-01 014554" src="https://github.com/user-attachments/assets/9a39e134-070d-4406-9483-08e859bc35c2" />
+
 Parfor loops:
 
     N = 100;
@@ -121,6 +124,7 @@ for k = order
     wb.step(k, sprintf('minion %d finished', k))
 end
 ```
+<img width="1534" height="164" alt="Aufzeichnung 2026-05-01 014747" src="https://github.com/user-attachments/assets/a66752a4-50f0-4961-a945-689a771cd61a" />
 
 ---
 
@@ -175,6 +179,7 @@ parfor k = 1:N
     wb.step(k, sprintf('img %d processed', k), 'S')
 end
 ```
+<img width="1540" height="130" alt="Aufzeichnung 2026-05-01 021546" src="https://github.com/user-attachments/assets/3eb7b21b-ac25-407a-b899-6104f9a8cea5" />
 
 When displayed items are grouped and `vectorDoneChar` is custom, the least frequent state in each group is shown. This helps identify the state that a group is likely waiting on.
 ## ⚙️API
@@ -216,12 +221,6 @@ When enabled, the bar shows:
 Estimation is based on:
 
     T_total ≈ (elapsed / completed_steps) * total_steps
-
----
-
-## 🖥Example Output
-
-    Processing |[===========>        ]  42.00%  21/50  00:00:02<00:00:03, Total~00:00:05 | file_021.png
 
 ---
 
