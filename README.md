@@ -37,39 +37,42 @@ addpath('path/to/FanCmdWaitbar')
 ## 🚀Quick Start
 
 Minimal example (auto-increment):
-
+```matlab
     wb = FanCmdWaitbar(100);
 
     for k = 1:100
         pause(0.05)
         wb.step();
     end
-
+```
 With title and topic:
-
+```matlab
     wb = FanCmdWaitbar(50, 'title', 'Processing');
 
     for k = 1:50
         pause(0.05)
         wb.step(k, sprintf('file_%03d.png', k));
     end
+    wb.step("s", "done!");
+```
 <img width="1222" height="118" alt="Aufzeichnung 2026-05-01 014303" src="https://github.com/user-attachments/assets/9972a848-f724-4ced-b36a-198323548e33" />
 
 
 With custom start index:
-
+```matlab
     wb = FanCmdWaitbar(20, 'startIdx', 5, 'title', 'Training');
 
     for k = 5:20
         wb.step(k, sprintf('epoch item %d', k));
     end
-
+    wb.step("s", "done!");
+```
 Disable timing:
-
+```matlab
     wb = FanCmdWaitbar(100, 'showTime', false);
-
+```
 Nested waitbars:
-
+```matlab
     wb = FanCmdWaitbar(200,'startIdx',1,'title','Training');
     for k = 1:200
         wb.step(k, sprintf('epoch item %d', k));
@@ -80,17 +83,18 @@ Nested waitbars:
         end
         wb2.clc()
     end
+```
 <img width="1214" height="124" alt="Aufzeichnung 2026-05-01 014554" src="https://github.com/user-attachments/assets/9a39e134-070d-4406-9483-08e859bc35c2" />
 
 Parfor loops:
-
+```matlab
     N = 100;
     wb = FanCmdWaitbar(N, title="Send the minions",mode="parfor");
     parfor k = 1:N
         pause(randi(20) * 0.1)
         wb.step([],sprintf('minion %d', k))
     end
----
+```
 ### Vector-style progress for non-sequential work
 
 For non-sequential processes, `barStyle="vector"` marks individual indices instead of assuming that progress is strictly ordered.
@@ -198,15 +202,20 @@ Optional:
 - mode ('default'/'parfor')
 
 Step function:
-
+```matlab
     wb.step()
     wb.step(i)
     wb.step(i, currentTopic)
+    wb.step(i, currentTopic, symbol)
     wb.step([], currentTopic)
-
+    wb.step([], currentTopic, symbol)
+    wb.step("s", currentTopic)
+    wb.step("status", currentTopic)
+```
 Behaviour:
 - No argument → auto-increment
 - i provided → set explicit progress, skip in parfor-mode
+- i is "s" or "status" → update status message without progress 
 - currentTopic → displayed on the right side
 - Stops automatically when endIdx is reached
 
