@@ -81,6 +81,19 @@ classdef FanCmdWaitbar < handle
     %       wb.step(k, sprintf('img %d processed', k), 'S')
     %   end
     %
+    % Example 9: status update without advancing progress
+    %   wb = FanCmdWaitbar(100, 'title', 'Training');
+    %   for k = 1:100
+    %       wb.step(k, sprintf('epoch %d: loading batch', k));
+    %       pause(0.05)
+    %
+    %       wb.step("status", sprintf('epoch %d: processing batch', k));
+    %       pause(0.05)
+    %
+    %       wb.step("s", sprintf('epoch %d: saving results', k));
+    %       pause(0.05)
+    %   end
+    %
     % Constructor:
     %   wb = FanCmdWaitbar(endIdx, Name, Value)
     %
@@ -109,6 +122,13 @@ classdef FanCmdWaitbar < handle
     %   wb.step(i, currentTopic, symbol)
     %   wb.step([], currentTopic)
     %   wb.step([], currentTopic, symbol)
+    %   wb.step("s", currentTopic)
+    %   wb.step("status", currentTopic)
+    %
+    % The special index commands "s" and "status" update only the displayed
+    % topic/status message. They do not advance the progress index and are
+    % excluded from time estimation. This is useful for reporting intermediate
+    % states without affecting the progress or remaining-time estimate.
     %
     % In bar style:
     %   - Progress is based on the current index or auto-incremented steps.
@@ -308,9 +328,7 @@ classdef FanCmdWaitbar < handle
 
     methods (Access = private)
         function internalStep(obj, i, currentTopic, symbol)
-            if obj.finished
-                return
-            end
+
 
             if nargin < 4 || isempty(symbol)
                 symbol = obj.vectorDoneChar;
@@ -320,15 +338,35 @@ classdef FanCmdWaitbar < handle
 
             excludeFromTimeEstimation = false;
 
-            if nargin < 2 || isempty(i)
+            if nargin < 2
+                i = [];
+            end
+            isStatusUpdate = false;
+
+            if (isstring(i) || ischar(i))
+                if strcmpi(i,"s") || strcmpi(i,"status")
+                    i = obj.currentIdx;
+                    isStatusUpdate = true;
+                else
+                    error('FanCmdWaitbar:InvalidStepCommand', ...
+                    '''i'' must be numeric or ''s'' or ''status''.')
+                end
+            end
+
+            if obj.finished && ~isStatusUpdate
+                return
+            end
+
+            if isempty(i)
                 obj.currentIdx = obj.currentIdx + 1;
             else
+    
                 validateattributes(i, {'numeric'}, {'scalar','finite'});
 
                 % Check if new idx is above current idx for time estimation.
                 % In vector style, out-of-order indices are expected, so this
                 % only prevents the estimate from jumping backwards.
-                if obj.currentIdx >= i
+                if obj.currentIdx >= i || isStatusUpdate
                     excludeFromTimeEstimation = true;
                 end
 
@@ -341,7 +379,7 @@ classdef FanCmdWaitbar < handle
                 currentTopic = char(string(currentTopic));
             end
 
-            if obj.currentIdx < obj.startIdx
+            if obj.currentIdx < obj.startIdx && ~isStatusUpdate
                 obj.currentIdx = obj.startIdx;
             end
 

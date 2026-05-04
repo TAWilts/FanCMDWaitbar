@@ -5,8 +5,8 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
     %   results = runtests('Test_FanCmdWaitbar.m');
     %   table(results)
     %
-    % Checkout the [Matlab File Exchange](https://de.mathworks.com/matlabcentral/fileexchange/183723-fancmdwaitbar) 
-    % or [GitHub](https://github.com/tawilts/FanCmdWaitbar) for more information and updates. 
+    % Checkout the [Matlab File Exchange](https://de.mathworks.com/matlabcentral/fileexchange/183723-fancmdwaitbar)
+    % or [GitHub](https://github.com/tawilts/FanCmdWaitbar) for more information and updates.
     %
     % Author: T. A. Wilts
     % License: MIT
@@ -38,7 +38,7 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
             testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('0/5'));
             testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('0.00%'));
         end
-        
+
         function constructorPrintsInitialState(testCase)
             out = evalc('wb = FanCmdWaitbar(5); delete(wb);');
             finalOut = testCase.normalizeTerminalOutput(out);
@@ -60,7 +60,7 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
                 'wb = FanCmdWaitbar(3, ''showTime'', false);' newline ...
                 'wb.step();' newline ...
                 'delete(wb);' ...
-            ]);
+                ]);
             finalOut = testCase.normalizeTerminalOutput(out);
 
             testCase.verifyFalse(contains(finalOut, 'Total~'));
@@ -74,7 +74,7 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
                 'wb.step();' newline ...
                 'wb.step();' newline ...
                 'wb.step();' newline ...
-            ]);
+                ]);
             finalOut = testCase.normalizeTerminalOutput(out);
 
             testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('3/3'));
@@ -87,7 +87,7 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
                 'wb = FanCmdWaitbar(10);' newline ...
                 'wb.step(4);' newline ...
                 'delete(wb);' ...
-            ]);
+                ]);
             finalOut = testCase.normalizeTerminalOutput(out);
 
             testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('4/10'));
@@ -99,7 +99,7 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
                 'wb = FanCmdWaitbar(10);' newline ...
                 'wb.step(2, ''topicA'');' newline ...
                 'delete(wb);' ...
-            ]);
+                ]);
             finalOut = testCase.normalizeTerminalOutput(out);
 
             testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('2/10'));
@@ -111,7 +111,7 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
                 'wb = FanCmdWaitbar(4);' newline ...
                 'wb.step([], ''abc'');' newline ...
                 'delete(wb);' ...
-            ]);
+                ]);
             finalOut = testCase.normalizeTerminalOutput(out);
 
             testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('1/4'));
@@ -123,7 +123,7 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
                 'wb = FanCmdWaitbar(8, ''startIdx'', 5);' newline ...
                 'wb.step(1);' newline ...
                 'delete(wb);' ...
-            ]);
+                ]);
             finalOut = testCase.normalizeTerminalOutput(out);
 
             % start=5, end=8 => totalSteps = 4
@@ -140,7 +140,7 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
                 'wb.step(5, ''repeat'');' newline ...
                 'wb.step(4, ''lower'');' newline ...
                 'delete(wb);' ...
-            ]);
+                ]);
             finalOut = testCase.normalizeTerminalOutput(out);
 
             % The class should allow repeated/lower explicit indices and keep rendering.
@@ -152,7 +152,7 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
             out = evalc([ ...
                 'wb = FanCmdWaitbar(5);' newline ...
                 'wb.step(5, ''done'');' newline ...
-            ]);
+                ]);
             finalOut = testCase.normalizeTerminalOutput(out);
 
             testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('5/5'));
@@ -165,7 +165,7 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
             out = evalc([ ...
                 'wb = FanCmdWaitbar(5);' newline ...
                 'wb.step(99);' newline ...
-            ]);
+                ]);
             finalOut = testCase.normalizeTerminalOutput(out);
 
             testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('5/5'));
@@ -178,7 +178,7 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
                 'wb = FanCmdWaitbar(2);' newline ...
                 'wb.step(2);' newline ...
                 'wb.step(2, ''SHOULD_NOT_APPEAR'');' newline ...
-            ]);
+                ]);
             finalOut = testCase.normalizeTerminalOutput(out);
 
             testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('2/2'));
@@ -190,7 +190,7 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
                 'wb = FanCmdWaitbar(10);' newline ...
                 'wb.step(2);' newline ...
                 'delete(wb);' ...
-            ]);
+                ]);
 
             testCase.verifyEqual(out(end), newline);
         end
@@ -201,7 +201,7 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
                 'wb.step(3, ''visibleBeforeClear'');' newline ...
                 'wb.clc();' newline ...
                 'delete(wb);' ...
-            ]);
+                ]);
             finalOut = testCase.normalizeTerminalOutput(out);
 
             % clc() backspaces over the last printed line and resets the stored length.
@@ -215,7 +215,7 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
                 'wb.clc();' newline ...
                 'wb.clc();' newline ...
                 'delete(wb);' ...
-            ]);
+                ]);
             finalOut = testCase.normalizeTerminalOutput(out);
 
             testCase.verifyEqual(string(finalOut), "");
@@ -241,7 +241,7 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
                 'wb = FanCmdWaitbar(5, title="StringTitle", mode="default");' newline ...
                 'wb.step(2, "StringTopic");' newline ...
                 'delete(wb);' ...
-            ]);
+                ]);
             finalOut = testCase.normalizeTerminalOutput(out);
 
             testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('StringTitle |'));
@@ -276,7 +276,7 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
                 'wb = FanCmdWaitbar(5, ''barStyle'', ''vector'', ''showTime'', false);' newline ...
                 'wb.step(3);' newline ...
                 'delete(wb);' ...
-            ]);
+                ]);
             finalOut = testCase.normalizeTerminalOutput(out);
 
             % In vector mode, step(3) marks one item; it must not imply 3/5.
@@ -291,7 +291,7 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
                 'wb.step(3);' newline ...
                 'wb.step(4);' newline ...
                 'delete(wb);' ...
-            ]);
+                ]);
             finalOut = testCase.normalizeTerminalOutput(out);
 
             testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('3/5'));
@@ -304,7 +304,7 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
                 'wb.step(3, ''first'');' newline ...
                 'wb.step(3, ''repeat'');' newline ...
                 'delete(wb);' ...
-            ]);
+                ]);
             finalOut = testCase.normalizeTerminalOutput(out);
 
             testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('1/5'));
@@ -317,7 +317,7 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
                 'wb = FanCmdWaitbar(5, ''barStyle'', ''vector'', ''showTime'', false);' newline ...
                 'wb.step(2, '''', ''x'');' newline ...
                 'delete(wb);' ...
-            ]);
+                ]);
             finalOut = testCase.normalizeTerminalOutput(out);
 
             testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('0/5'));
@@ -330,7 +330,7 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
                 'wb.step(3);' newline ...
                 'wb.step(1);' newline ...
                 'wb.step(2);' newline ...
-            ]);
+                ]);
             finalOut = testCase.normalizeTerminalOutput(out);
 
             testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('3/3'));
@@ -344,7 +344,7 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
                 'wb.step(1, '''', ''L'');' newline ...
                 'wb.step(2, '''', ''P'');' newline ...
                 'delete(wb);' ...
-            ]);
+                ]);
             finalOut = testCase.normalizeTerminalOutput(out);
 
             % With vectorDoneChar set, only entries with the end symbol count as complete.
@@ -359,7 +359,7 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
                 'wb.step(1, '''', ''L'');' newline ...
                 'wb.step(1, '''', ''S'');' newline ...
                 'delete(wb);' ...
-            ]);
+                ]);
             finalOut = testCase.normalizeTerminalOutput(out);
 
             testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('1/3'));
@@ -374,7 +374,7 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
                 'wb.step(2, '''', ''P'');' newline ...
                 'wb.step(1, '''', ''S'');' newline ...
                 'wb.step(2, '''', ''S'');' newline ...
-            ]);
+                ]);
             finalOut = testCase.normalizeTerminalOutput(out);
 
             testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('2/2'));
@@ -390,7 +390,7 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
                 'for k = 1:119, wb.step(k, '''', ''S''); end' newline ...
                 'wb.step(120, '''', ''P'');' newline ...
                 'delete(wb);' ...
-            ]);
+                ]);
             finalOut = testCase.normalizeTerminalOutput(out);
 
             % For grouped vector bars, the rare/non-final state should remain visible.
@@ -441,7 +441,7 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
                 'wb.step([], ''workerC'');' newline ...
                 'pause(0.5);' newline ...
                 'delete(wb);' ...
-            ]);
+                ]);
             finalOut = testCase.normalizeTerminalOutput(out);
 
             % DataQueue callbacks are asynchronous. The pause above gives MATLAB
@@ -471,18 +471,86 @@ classdef Test_FanCmdWaitbar < matlab.unittest.TestCase
                 'wb.step(2, [], ''S'');' newline ...
                 'pause(0.5);' newline ...
                 'delete(wb);' ...
-            ]);
+                ]);
             finalOut = testCase.normalizeTerminalOutput(out);
 
             testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('2/2'));
             testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('100.00%'));
+        end
+
+        function statusShortcutDoesNotAdvanceProgress(testCase)
+            out = evalc([ ...
+                'wb = FanCmdWaitbar(5, ''showTime'', false);' newline ...
+                'wb.step(2, ''beforeStatus'');' newline ...
+                'wb.step(''s'', ''statusOnly'');' newline ...
+                'delete(wb);' ...
+                ]);
+            finalOut = testCase.normalizeTerminalOutput(out);
+
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('2/5'));
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('40.00%'));
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('statusOnly'));
+
+            testCase.verifyFalse(contains(finalOut, '3/5'));
+            testCase.verifyFalse(contains(finalOut, '60.00%'));
+        end
+
+        function statusCommandDoesNotAdvanceProgress(testCase)
+            out = evalc([ ...
+                'wb = FanCmdWaitbar(5, ''showTime'', false);' newline ...
+                'wb.step(2, ''beforeStatus'');' newline ...
+                'wb.step("status", "longStatusAlias");' newline ...
+                'delete(wb);' ...
+                ]);
+            finalOut = testCase.normalizeTerminalOutput(out);
+
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('2/5'));
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('40.00%'));
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('longStatusAlias'));
+
+            testCase.verifyFalse(contains(finalOut, '3/5'));
+            testCase.verifyFalse(contains(finalOut, '60.00%'));
+        end
+
+        function statusBeforeFirstStepDoesNotAdvanceProgress(testCase)
+            out = evalc([ ...
+                'wb = FanCmdWaitbar(5, ''showTime'', false);' newline ...
+                'wb.step(''s'', ''waitingBeforeStart'');' newline ...
+                'delete(wb);' ...
+                ]);
+            finalOut = testCase.normalizeTerminalOutput(out);
+
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('0/5'));
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('0.00%'));
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('waitingBeforeStart'));
+
+            testCase.verifyFalse(contains(finalOut, '1/5'));
+            testCase.verifyFalse(contains(finalOut, '20.00%'));
+        end
+
+        function statusUpdateIsExcludedFromTimeEstimation(testCase)
+            out = evalc([ ...
+                'wb = FanCmdWaitbar(5);' newline ...
+                'wb.step(2, ''beforePause'');' newline ...
+                'pause(1.2);' newline ...
+                'wb.step(''s'', ''afterPauseStatusOnly'');' newline ...
+                'delete(wb);' ...
+                ]);
+            finalOut = testCase.normalizeTerminalOutput(out);
+
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('2/5'));
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('afterPauseStatusOnly'));
+
+            % If status updates are excluded from time estimation, the elapsed time
+            % should still be based on the previous real progress update.
+            testCase.verifyThat(finalOut, matlab.unittest.constraints.ContainsSubstring('00:00:00<'));
         end
     end
 
     methods (Static, Access = private)
         function tf = hasParallelToolbox()
             tf = exist('parallel.pool.DataQueue', 'class') == 8 && ...
-                 license('test', 'Distrib_Computing_Toolbox');
+                license('test', 'Distrib_Computing_Toolbox');
         end
 
         function out = normalizeTerminalOutput(raw)

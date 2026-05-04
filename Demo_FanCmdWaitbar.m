@@ -10,18 +10,18 @@ topic = ["cleaning dishes","listening to protovibe","cycling","watching TV","bee
 
 fprintf('Simple\n')
 iter = 20;
-wb = FanCmdWaitbar(iter+1,'startIdx',1,'title','Training');
+wb = FanCmdWaitbar(iter,'startIdx',1,'title','Training');
 for k = 1:20
   pause(0.2)
   wb.step([], topic(floor((k-1)/4)+1));
 end
-wb.step([], "done!");
+wb.step("s", "done!");
 
 
 fprintf('Multistep \n')
 
 iter = 3;
-wb = FanCmdWaitbar(iter+1,'startIdx',1,'title','Training');
+wb = FanCmdWaitbar(iter,'startIdx',1,'title','Training');
 for k = 1:iter
   wb.step(k, "thinking about "+topic(k));
   pause(0.3)
@@ -30,12 +30,12 @@ for k = 1:iter
   wb.step(k, "regretting "+topic(k));
   pause(0.3)
 end
-wb.step([], "done!");
+wb.step("s", "done!");
 
 fprintf('Nested \n')
 
 iter = 2;
-wb = FanCmdWaitbar(iter*3+1,'startIdx',1,'title','Training');
+wb = FanCmdWaitbar(iter*3,'startIdx',1,'title','Training');
 for k = 1:iter
   wb.step([], "thinking about "+topic(k));
   doSomething()
@@ -44,8 +44,22 @@ for k = 1:iter
   wb.step([], "regretting "+topic(k));
   doSomething()
 end
-wb.step([], "done!");
+wb.step("s", "done!");
 
+fprintf('Status \n')
+
+iter = 5;
+wb = FanCmdWaitbar(iter,'startIdx',1,'title','Training');
+for k = 1:iter
+  wb.step("s", "thinking about "+topic(k)); % or "status"
+  pause(0.8)
+  wb.step("s", "do "+topic(k));
+  pause(0.8)
+  wb.step("s", "regretting "+topic(k));
+  pause(0.8)
+  wb.step([], "done with "+topic(k));
+end
+wb.step("s", "done!");
 
 
 function doSomething()
